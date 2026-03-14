@@ -1,0 +1,24 @@
+<h2>Login Admin</h2>
+
+<input id="user">
+<input id="pass" type="password">
+
+<button onclick="login()">Entrar</button>
+
+<script>
+
+function login(){
+
+if(
+document.getElementById("user").value=="administrador"
+&&
+document.getElementById("pass").value=="147821@"
+){
+window.location="dashboard.html"
+}else{
+alert("Login inválido")
+}
+
+}
+
+</script>

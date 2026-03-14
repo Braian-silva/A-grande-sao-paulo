@@ -1,0 +1,447 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Loja - A Grande São Paulo RP</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="loja.js" defer></script>
+
+<style>
+
+/* BACKGROUND */
+
+body{
+margin:0;
+font-family:Arial;
+background-image:url("background.jpg.png");
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+color:white;
+}
+
+/* CAMADA ESCURA */
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.35);
+z-index:-1;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:rgba(0,0,0,0.6);
+-webkit-backdrop-filter:blur(10px);
+backdrop-filter:blur(10px);
+}
+
+/* LOJA */
+
+.loja{
+max-width:1200px;
+margin:auto;
+padding:40px;
+background:rgba(0,0,0,0.5);
+border-radius:10px;
+}
+
+/* PRODUTOS */
+
+.produtos{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.produto{
+background:rgba(0,0,0,0.6);
+padding:20px;
+border-radius:10px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+}
+
+.produto:hover{
+transform:scale(1.05);
+box-shadow:0 0 20px #00ffee;
+}
+
+.produto img{
+width:120px;
+}
+
+.preco{
+color:#00ff9d;
+font-weight:bold;
+}
+
+/* CARRINHO */
+
+.carrinhoTopo{
+background:#00ffee;
+color:black;
+padding:10px 20px;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* MODAL */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:#111;
+padding:30px;
+border-radius:10px;
+text-align:center;
+width:350px;
+position:relative;
+}
+
+.fechar{
+position:absolute;
+right:20px;
+top:10px;
+font-size:25px;
+cursor:pointer;
+}
+
+button{
+padding:10px 20px;
+margin-top:10px;
+cursor:pointer;
+border:none;
+border-radius:6px;
+background:#00ffee;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+border:none;
+}
+
+textarea{
+width:100%;
+height:80px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div>
+<h1>🛒 Loja Oficial</h1>
+<p>A Grande São Paulo Roleplay</p>
+</div>
+
+<div class="carrinhoTopo" onclick="abrirCarrinho()">
+🛒 Carrinho (<span id="contadorCarrinho">0</span>)
+</div>
+
+</header>
+
+
+<div class="loja">
+
+<h2>💎 Gemas</h2>
+
+<div class="produtos">
+
+<div class="produto" onclick="abrirProduto('10 Gemas', 7.90, '10gemas.png', 'Pacote com 10 gemas.')">
+<img src="10gemas.png" alt="10 Gemas">
+<h3>10 Gemas</h3>
+<p class="preco">R$ 7,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('50 Gemas', 29.90, '10gemas.png', 'Pacote com 50 gemas.')">
+<img src="10gemas.png" alt="50 Gemas">
+<h3>50 Gemas</h3>
+<p class="preco">R$ 29,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('100 Gemas', 54.90, '10gemas.png', 'Pacote com 100 gemas.')">
+<img src="10gemas.png" alt="100 Gemas">
+<h3>100 Gemas</h3>
+<p class="preco">R$ 54,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('1000 Gemas', 449.90, '10gemas.png', 'Pacote com 1000 gemas.')">
+<img src="10gemas.png" alt="1000 Gemas">
+<h3>1000 Gemas</h3>
+<p class="preco">R$ 449,90</p>
+</div>
+
+</div>
+
+
+<h2>💳 Cartões</h2>
+
+<div class="produtos">
+
+<div class="produto" onclick="abrirProduto('Cartão Classic', 24.90, 'cartãoclassic.png', 'Cartão bancário básico.')">
+<img src="cartãoclassic.png" alt="Cartão Classic">
+<h3>Cartão Classic</h3>
+<p class="preco">R$ 24,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Cartão Gold', 39.90, 'cartãogold.png', 'Cartão com benefícios extras.')">
+<img src="cartãogold.png" alt="Cartão Gold">
+<h3>Cartão Gold</h3>
+<p class="preco">R$ 39,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Cartão Platinum', 59.90, 'cartãoplatinum.png', 'Cartão premium.')">
+<img src="cartãoplatinum.png" alt="Cartão Platinum">
+<h3>Cartão Platinum</h3>
+<p class="preco">R$ 59,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Cartão Black', 79.90, 'cartãoblack.png', 'Cartão elite.')">
+<img src="cartãoblack.png" alt="Cartão Black">
+<h3>Cartão Black</h3>
+<p class="preco">R$ 79,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Cartão Infinite', 119.90, 'cartãoinfinite.png', 'Cartão máximo do servidor.')">
+<img src="cartãoinfinite.png" alt="Cartão Infinite">
+<h3>Cartão Infinite</h3>
+<p class="preco">R$ 119,90</p>
+</div>
+
+</div>
+
+
+<h2>⭐ Benefícios</h2>
+
+<div class="produtos">
+
+<div class="produto" onclick="abrirProduto('Telão', 1000, 'produto.png', 'Telão personalizado.')">
+<img src="produto.png" alt="Telão">
+<h3>Telão</h3>
+<p class="preco">R$ 1.000,00</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Spotify', 34.90, 'Spotify.png', 'Sistema de música no carro.')">
+<img src="Spotify.png" alt="Spotify">
+<h3>Spotify</h3>
+<p class="preco">R$ 34,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('ATM Próprio', 79.90, 'ATM Próprio.png', 'ATM privado.')">
+<img src="ATM Próprio.png" alt="ATM Próprio">
+<h3>ATM Próprio</h3>
+<p class="preco">R$ 79,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Baú Privado', 199.90, 'Baú Privado.png', 'Baú exclusivo.')">
+<img src="bau pv.png" alt="bau pv">
+<h3>Baú Privado</h3>
+<p class="preco">R$ 199,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Remover Blacklist', 14.90, 'produto.png', 'Remoção de blacklist.')">
+<img src="remover bl.png" alt="Remover Blacklist">
+<h3>Remover Blacklist</h3>
+<p class="preco">R$ 14,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Remover Banimento', 249.90, 'produto.png', 'Remoção de banimento.')">
+<img src="produto.png" alt="Remover Banimento">
+<h3>Remover Banimento</h3>
+<p class="preco">R$ 249,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('BLIP DE GARAGEM', 199.00, 'BLIP DE GARAGEM.png', 'Adiciona blip de garagem no mapa.')">
+<img src="BLIP DE GARAGEM.png" alt="BLIP DE GARAGEM">
+<h3>BLIP DE GARAGEM</h3>
+<p class="preco">R$ 199,00</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('BLIP GARAGEM PRIVADA', 249.00, 'BLIP GARAGEM PRIVADA.png', 'Blip exclusivo para sua garagem privada.')">
+<img src="garagem pv.png" alt="BLIP GARAGEM PRIVADA">
+<h3>BLIP GARAGEM PRIVADA</h3>
+<p class="preco">R$ 249,00</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Fechadura', 34.90, 'fechadura.png', 'Sistema de fechadura para propriedades.')">
+<img src="fechadura.png" alt="Fechadura">
+<h3>FECHADURA</h3>
+<p class="preco">R$ 34,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Cirurgia Plástica', 34.90, 'cirurgia.png', 'Permite alterar aparência do personagem.')">
+<img src="cirurgia.png" alt="Cirurgia Plástica">
+<h3>CIRURGIA PLÁSTICA</h3>
+<p class="preco">R$ 34,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Revólver 38 + 70 Muni', 15.90, 'revolver38.png', 'Revólver calibre 38 com 70 munições.')">
+<img src="revolver38.png" alt="Revólver 38">
+<h3>REVÓLVER 38 + 70 MUNI</h3>
+<p class="preco">R$ 15,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Pistola + 70 Muni', 24.90, 'pistola.png', 'Pistola com 70 munições.')">
+<img src="pistola.png" alt="Pistola">
+<h3>PISTOLA + 70 MUNI</h3>
+<p class="preco">R$ 24,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Armário Exclusivo', 24.90, 'armario.png', 'Armário privado para guardar itens.')">
+<img src="armario.png" alt="Armário">
+<h3>ARMÁRIO EXCLUSIVO</h3>
+<p class="preco">R$ 24,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Loja de Departamento', 149.90, 'lojadepartamento.png', 'Propriedade de loja dentro da cidade.')">
+<img src="lojadepartamento.png" alt="Loja de Departamento">
+<h3>LOJA DE DEPARTAMENTO</h3>
+<p class="preco">R$ 149,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Loja de Roupas', 129.90, 'lojaroupas.png', 'Permite possuir loja de roupas.')">
+<img src="lojaroupas.png" alt="Loja de Roupas">
+<h3>LOJA DE ROUPAS</h3>
+<p class="preco">R$ 129,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Verificado Instagram', 29.90, 'instagram.png', 'Conta verificada dentro do servidor.')">
+<img src="instagram.png" alt="Instagram Verificado">
+<h3>VERIFICADO INSTAGRAM</h3>
+<p class="preco">R$ 29,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Depósito 50K', 29.90, 'dinheiro.png', 'Receba 50 mil no banco do servidor.')">
+<img src="dinheiro.png" alt="Depósito 50K">
+<h3>DEPÓSITO 50K</h3>
+<p class="preco">R$ 29,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Depósito 100K', 59.90, 'dinheiro.png', 'Receba 100 mil no banco do servidor.')">
+<img src="dinheiro.png" alt="Depósito 100K">
+<h3>DEPÓSITO 100K</h3>
+<p class="preco">R$ 59,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Depósito 250K', 129.90, 'dinheiro.png', 'Receba 250 mil no banco do servidor.')">
+<img src="dinheiro.png" alt="Depósito 250K">
+<h3>DEPÓSITO 250K</h3>
+<p class="preco">R$ 129,90</p>
+</div>
+
+<div class="produto" onclick="abrirProduto('Passe Livre', 69.90, 'passelivre.png', 'Benefício de passe livre no servidor.')">
+<img src="passelivre.png" alt="Passe Livre">
+<h3>PASSE LIVRE</h3>
+<p class="preco">R$ 69,90</p>
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- MODAL PRODUTO -->
+
+<div id="produtoModal" class="modal">
+
+<div class="modal-content">
+
+<span class="fechar" onclick="fecharProduto()">×</span>
+
+<img id="produtoImg" width="200">
+
+<h2 id="produtoNome"></h2>
+
+<p id="produtoDesc"></p>
+
+<h3 id="produtoPreco"></h3>
+
+<button onclick="addCarrinhoModal()">Adicionar ao Carrinho</button>
+<button onclick="comprarAgora()">Comprar Agora</button>
+
+</div>
+
+</div>
+ 
+
+<!-- MODAL CARRINHO -->
+
+<div id="carrinhoModal" class="modal">
+
+<div class="modal-content">
+
+<span class="fechar" onclick="fecharCarrinho()">×</span>
+
+<h2>Seu Carrinho</h2>
+
+<div id="listaCarrinho"></div>
+
+<h3>Total: R$ <span id="totalCarrinho">0</span></h3>
+
+<input id="discordInput" placeholder="Seu Discord ou ID do jogador">
+
+<button onclick="checkout()">Finalizar Compra</button>
+
+</div>
+
+</div>
+
+
+<!-- MODAL PIX -->
+
+<div id="pixModal" class="modal">
+
+<div class="modal-content">
+
+<span class="fechar" onclick="fecharPix()">×</span>
+
+<h2>Pagamento PIX</h2>
+
+<p>Escaneie o QR Code abaixo:</p>
+
+<img id="pixQr" width="250">
+
+<p>Ou copie o código:</p>
+
+<textarea id="pixCode"></textarea>
+
+</div>
+
+</div>
+
+</body>
+</html>

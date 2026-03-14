@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Grande São Paulo RP</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon-32x32.png" type="image/png">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins', sans-serif;}
+body{background:#0b0b0b;color:white;padding:40px;}
+.header{text-align:center;margin-bottom:40px;}
+.logo{width:120px;margin-bottom:10px;}
+.container{display:flex;max-width:1100px;margin:auto;gap:40px;}
+.left{flex:1;}
+.right{width:350px;}
+.box{background:#111;padding:25px;border-radius:10px;margin-bottom:20px;}
+.discordLogin{display:block;width:100%;background:#5865F2;padding:12px;border-radius:6px;text-align:center;color:white;text-decoration:none;font-weight:bold;margin-bottom:15px;}
+.discordLogin:hover{background:#4752C4;}
+input{width:100%;padding:12px;margin-top:10px;background:#1a1a1a;border:none;border-radius:6px;color:white;}
+.row{display:flex;gap:10px;}
+.row input{flex:1;}
+.error{color:#ff4b4b;font-size:13px;display:none;}
+.pay{margin-top:20px;width:100%;padding:15px;background:#ff5a3c;border:none;border-radius:8px;font-size:18px;color:white;cursor:pointer;}
+.product{display:flex;justify-content:space-between;margin-bottom:10px;}
+.total{margin-top:15px;font-size:20px;font-weight:bold;}
+.pixArea{display:none;margin-top:20px;text-align:center;}
+.pixArea img{margin-top:10px;width:200px;}
+.pixCode{background:#000;padding:10px;margin-top:10px;word-break:break-all;font-size:13px;}
+.termosLabel {display:block;margin-top:15px;}
+.divider {margin:15px 0;opacity:0.2;}
+#btnAdmin{position:absolute;top:20px;right:20px;padding:10px 15px;border:none;border-radius:6px;background:#ff4444;color:white;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="header">
+<img src="logo.png.png" class="logo" alt="Logo Grande São Paulo RP">
+<h1>Finalizar Compra</h1>
+</div>
+
+<div class="container">
+
+<div class="left">
+<div class="box">
+<h2>Informações</h2>
+
+<a class="discordLogin" href="https://discord.com/oauth2/authorize?client_id=1294019551394271292&response_type=token&scope=identify">
+Entrar com Discord
+</a>
+
+<input id="nome" placeholder="Nome"><div class="error">Este campo é obrigatório</div>
+<input id="sobrenome" placeholder="Sobrenome"><div class="error">Este campo é obrigatório</div>
+<input id="email" placeholder="Email"><div class="error">Este campo é obrigatório</div>
+<input id="idcidade" placeholder="Seu ID na cidade"><div class="error">Este campo é obrigatório</div>
+
+<div class="row">
+<input id="cpf" placeholder="CPF"><div class="error">Este campo é obrigatório</div>
+<input id="telefone" placeholder="Telefone"><div class="error">Este campo é obrigatório</div>
+</div>
+
+<label class="termosLabel"><input type="checkbox" id="termos"> Eu aceito os termos</label>
+<div id="erroTermos" class="error">Você precisa aceitar os termos</div>
+
+<button class="pay" onclick="pagar()">Pagar <span id="totalBotao">R$ 0,00</span></button>
+
+<div class="pixArea" id="pixArea">
+<h3>Pagamento PIX</h3>
+<img id="qrcode" src="">
+<div class="pixCode" id="pixCode"></div>
+<img src="https://www.mercadopago.com.br/developers/sites/brand/MP-Brand-Logo.png" alt="Mercado Pago Logo" style="margin-top:10px;width:150px;">
+</div>
+
+</div>
+</div>
+
+<div class="right">
+<div class="box">
+<h2>Resumo</h2>
+<div class="product"><span id="produtoNome">Produto</span><span id="produtoPreco">R$ 0,00</span></div>
+<hr class="divider">
+<div class="product"><span>Subtotal</span><span id="subtotal">R$ 0,00</span></div>
+<div class="total">Total: <span id="total">R$ 0,00</span></div>
+</div>
+</div>
+</div>
+
+<!-- Botão Painel Admin -->
+<button id="btnAdmin" onclick="abrirLoginAdmin()">Admin</button>
+
+<!-- Modal Login Admin -->
+<div class="modal" id="modalLoginAdmin">
+<div class="modal-content">
+<span class="close" onclick="fecharLoginAdmin()">✖</span>
+<h2>Login Admin</h2>
+<input type="text" id="adminUser" placeholder="Usuário" style="width:100%;padding:10px;margin-bottom:10px;border-radius:6px;border:none;">
+<input type="password" id="adminPass" placeholder="Senha" style="width:100%;padding:10px;margin-bottom:10px;border-radius:6px;border:none;">
+<button onclick="loginAdmin()" style="padding:10px 20px;background:#00ff88;border:none;border-radius:6px;cursor:pointer;">Entrar</button>
+<div id="erroAdmin" style="color:#ff4b4b;margin-top:10px;display:none;">Usuário ou senha incorretos</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const produto = JSON.parse(localStorage.getItem("produtoCheckout"));
+if(produto){
+    document.getElementById("produtoNome").innerText = produto.nome;
+    document.getElementById("produtoPreco").innerText = "R$ " + produto.preco.toFixed(2);
+    document.getElementById("subtotal").innerText = "R$ " + produto.preco.toFixed(2);
+    document.getElementById("total").innerText = "R$ " + produto.preco.toFixed(2);
+    document.getElementById("totalBotao").innerText = "R$ " + produto.preco.toFixed(2);
+}
+
+const webhookDiscord = "SUA_URL_DO_WEBHOOK_DISCORD";
+
+async function enviarWebhook(discordName, produtoNome, valor){
+    try{
+        await fetch(webhookDiscord,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({content:`💸 Nova compra!\n👤 Jogador: ${discordName}\n🎁 Produto: ${produtoNome}\n💰 Valor: R$ ${valor.toFixed(2)}`})
+        });
+    }catch(err){console.error("Erro webhook:",err);}
+}
+
+async function pagar(){
+    let valido = true;
+    const campos = ["nome","sobrenome","email","idcidade","cpf","telefone"];
+    campos.forEach(id=>{
+        const campo = document.getElementById(id);
+        const erro = campo.nextElementSibling;
+        if(!campo.value){erro.style.display="block";valido=false;}else{erro.style.display="none";}
+    });
+    const termos = document.getElementById("termos");
+    if(!termos.checked){document.getElementById("erroTermos").style.display="block";valido=false;}else{document.getElementById("erroTermos").style.display="none";}
+    if(!valido) return;
+
+    try{
+        const response = await fetch("http://localhost:3000/pix",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({produto:produto.nome,valor:produto.preco,discord:document.getElementById("nome").value})
+        });
+        const data = await response.json();
+        document.getElementById("pixArea").style.display="block";
+        document.getElementById("qrcode").src = "data:image/png;base64," + data.qr_code_base64;
+        document.getElementById("pixCode").innerText = data.qr_code;
+        enviarWebhook(document.getElementById("nome").value, produto.nome, produto.preco);
+    }catch(err){
+        alert("Não foi possível gerar PIX. Tente novamente mais tarde.");
+        console.error(err);
+    }
+}
+
+// Admin
+function abrirLoginAdmin(){document.getElementById("modalLoginAdmin").style.display="flex";}
+function fecharLoginAdmin(){document.getElementById("modalLoginAdmin").style.display="none";}
+function loginAdmin(){
+    const user = document.getElementById("adminUser").value;
+    const pass = document.getElementById("adminPass").value;
+    if(user==="administrador" && pass==="147821@"){window.location.href="admin.html";}
+    else{document.getElementById("erroAdmin").style.display="block";}
+}
+</script>
+</body>
+</html>
